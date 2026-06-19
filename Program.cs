@@ -96,10 +96,19 @@ var app = builder.Build();
 // ============================================================
 // 6. PIPELINE — middlewares van DESPUÉS del Build()
 // ============================================================
+
+// Sacamos Swagger del IF para que funcione tanto local como en Render
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    // Esto hace que Swagger sea la página de inicio predeterminada al abrir el link
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Club Deportivo API v1");
+    c.RoutePrefix = string.Empty;
+});
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // Aquí puedes dejar otras configuraciones exclusivas de desarrollo si las hubiera
 }
 
 app.UseHttpsRedirection();
