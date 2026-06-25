@@ -263,12 +263,38 @@
                                     "Error interno del servidor");
                             }
                         }
+                    // =========================================
+                    // OBTENER TODOS
+                    // =========================================
+                    // [Authorize]
+                    [HttpGet("ListarTodos")]
+                    [ProducesResponseType(typeof(List<SociosDto>), StatusCodes.Status200OK)]
+                    public async Task<IActionResult> ListarTodos()
+                    {
+                        try
+                        {
+                            var lista =
+                                await _sociosRepo.ObtenerTodosAsync();
 
-                        // =========================================
-                        // OBTENER POR ID
-                        // =========================================
-                       // [Authorize]
-                        [HttpGet("{id}")]
+                            return Ok(lista);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(
+                                ex,
+                                "Error al obtener Todos los Socioss");
+
+                            return StatusCode(
+                                500,
+                                "Error interno del servidor");
+                        }
+                    }
+
+        // =========================================
+        // OBTENER POR ID
+        // =========================================
+        // [Authorize]
+        [HttpGet("{id}")]
                         [ProducesResponseType(typeof(SociosDto), StatusCodes.Status200OK)]
                         [ProducesResponseType(StatusCodes.Status404NotFound)]
                         public async Task<IActionResult> ObtenerPorId(int id)

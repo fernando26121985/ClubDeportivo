@@ -17,7 +17,7 @@
 
                     // READ
                     Task<SociosDto> ObtenerPorIdAsync(int Id);
-                   // Task<List<SociosDto>> ObtenerTodosAsync();
+                    Task<List<SociosDto>> ObtenerTodosAsync();
                     Task<List<SociosDto>> ObtenerPaginadoAsync(int pagina = 1, int filas = 10);
                   //  Task<List<SociosDto>> BuscarAsync(string criterio);
                   //  Task<int> ContarAsync();

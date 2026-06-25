@@ -24,14 +24,12 @@ namespace ClubDeportivo.Repositories
         {
             return new SociosDto
                 {
-                                Id = reader.GetInt32(reader.GetOrdinal("id")),
+                 Id = reader.GetInt32(reader.GetOrdinal("id")),
                 Nombre = reader.GetString(reader.GetOrdinal("nombre")),
                 Apellido = reader.GetString(reader.GetOrdinal("apellido")),
-                FechaIngreso = DateOnly.FromDateTime(
-                    reader.GetDateTime(reader.GetOrdinal("fecha_ingreso"))
-                ),
+                FechaIngreso = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("fecha_ingreso"))),
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
-                            };
+                  };
         }
 
         public async Task<List<SociosDto>> ObtenerPaginadoAsync(int pagina = 1, int filas = 10)
@@ -45,6 +43,25 @@ namespace ClubDeportivo.Repositories
                 cmd.Parameters.Add(new NpgsqlParameter() { ParameterName = "@pagina", Value = pagina });
                 cmd.Parameters.Add(new NpgsqlParameter() { ParameterName = "@filas", Value = filas });
                 
+                using var reader = await cmd.ExecuteReaderAsync();
+                var lista = new List<SociosDto>();
+                while (await reader.ReadAsync())
+                    lista.Add(MapearSocios(reader));
+                return lista;
+            }
+            finally
+            {
+                await _db.CloseConnectionAsync();
+            }
+        }
+        public async Task<List<SociosDto>> ObtenerTodosAsync()
+        {
+            try
+            {
+                await _db.OpenConnectionAsync();
+                string sql = "SELECT * FROM fn_listar_socios();";
+
+                using var cmd = new NpgsqlCommand(sql, _db.Connection);
                 using var reader = await cmd.ExecuteReaderAsync();
                 var lista = new List<SociosDto>();
                 while (await reader.ReadAsync())
