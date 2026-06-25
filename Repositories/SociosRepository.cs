@@ -59,7 +59,7 @@ namespace ClubDeportivo.Repositories
             try
             {
                 await _db.OpenConnectionAsync();
-                string sql = "SELECT * FROM fn_listar_socios();";
+                string sql = "SELECT * FROM fn_listar_todos_socios();";
 
                 using var cmd = new NpgsqlCommand(sql, _db.Connection);
                 using var reader = await cmd.ExecuteReaderAsync();
